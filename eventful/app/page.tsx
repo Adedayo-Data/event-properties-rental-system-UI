@@ -2,14 +2,13 @@ import Image from "next/image";
 import FeaturedVenues from "@/components/FeaturedVenues";
 import HowItWorks from "@/components/HowItWorks";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FaSearch } from "react-icons/fa";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="min-h-screen w-full bg-gray">
       {/* Hero Section */}
-      <section className="w-full bg-gray-50 py-16">
+      <section className="w-full bg-green-200 py-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 px-4">
           {/* Left: Text */}
           <div className="flex-1 text-center md:text-left">
@@ -20,16 +19,9 @@ export default function Home() {
               Discover and book top event centers for weddings, parties,
               conferences, and more.
             </p>
-            <div className="flex w-full max-w-sm items-center gap-2">
-              <Input
-                type="email"
-                placeholder="Search a venue"
-                className="rounded-xl py-5"
-              />
-              <Button type="submit" variant="outline">
-                <FaSearch />
-              </Button>
-            </div>
+            <Button className="text-xl px-6 py-4">
+              <Link href="/venues">See More</Link>
+            </Button>
           </div>
           {/* Right: Image */}
           <div className="flex-1 flex justify-center">

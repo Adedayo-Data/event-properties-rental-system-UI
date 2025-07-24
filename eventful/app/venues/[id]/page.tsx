@@ -53,7 +53,7 @@ export default function VenueDetailPage() {
         <Link href="/venues">
           <Button
             variant="outline"
-            className="flex items-center gap-2 px-6 py-3 rounded-full text-accent hover:text-primary"
+            className="flex items-center gap-2 px-6 py-3 rounded-full text-black hover:text-green-300"
           >
             <FaArrowLeft />
           </Button>
@@ -74,7 +74,7 @@ export default function VenueDetailPage() {
         ))}
       </div>
       {/* Venue Name & Address */}
-      <h1 className="text-3xl font-bold text-accent mb-2">{mockVenue.name}</h1>
+      <h1 className="text-3xl font-bold text-black mb-2">{mockVenue.name}</h1>
       <p className="text-gray-500 mb-1">
         Located in the heart of downtown, this elegant ballroom is perfect for
         weddings, corporate events, and galas.
@@ -101,15 +101,15 @@ export default function VenueDetailPage() {
         </div>
       </div>
       {/* About */}
-      <h2 className="text-xl font-bold text-accent mb-2">About This Venue</h2>
+      <h2 className="text-xl font-bold text-black mb-2">About This Venue</h2>
       <p className="text-gray-700 mb-4">{mockVenue.about}</p>
       {/* Amenities */}
-      <h2 className="text-xl font-bold text-accent mb-2">Amenities</h2>
+      <h2 className="text-xl font-bold text-black mb-2">Amenities</h2>
       <div className="flex flex-wrap gap-3 mb-6">
         {mockVenue.amenities.map((am, idx) => (
           <div
             key={idx}
-            className="flex items-center gap-2 px-4 py-2 bg-gray rounded-xl text-accent text-sm font-medium shadow"
+            className="flex items-center gap-2 px-4 py-2 bg-gray rounded-xl text-black text-sm font-medium shadow"
           >
             {am.icon}
             {am.label}
@@ -117,13 +117,11 @@ export default function VenueDetailPage() {
         ))}
       </div>
       {/* Availability (static calendar for now) */}
-      <h2 className="text-xl font-bold text-accent mb-2">Availability</h2>
+      <h2 className="text-xl font-bold text-black mb-2">Availability</h2>
       <div className="flex flex-col md:flex-row gap-8 mb-6 w-full">
         {/* July 2024 */}
         <div className="flex-1">
-          <div className="text-sm font-semibold text-accent mb-2">
-            July 2024
-          </div>
+          <div className="text-sm font-semibold text-black mb-2">July 2024</div>
           <div className="grid grid-cols-7 gap-1 text-xs text-center">
             {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
               <div key={i} className="font-bold text-gray-500">
@@ -138,7 +136,7 @@ export default function VenueDetailPage() {
                     `2024-07-${String(day).padStart(2, "0")}`
                   )
                     ? "bg-primary text-white"
-                    : "text-accent"
+                    : "text-black"
                 }`}
               >
                 {day}
@@ -148,7 +146,7 @@ export default function VenueDetailPage() {
         </div>
         {/* August 2024 */}
         <div className="flex-1">
-          <div className="text-sm font-semibold text-accent mb-2">
+          <div className="text-sm font-semibold text-black mb-2">
             August 2024
           </div>
           <div className="grid grid-cols-7 gap-1 text-xs text-center">
@@ -165,7 +163,7 @@ export default function VenueDetailPage() {
                     `2024-08-${String(day).padStart(2, "0")}`
                   )
                     ? "bg-primary text-white"
-                    : "text-accent"
+                    : "text-black"
                 }`}
               >
                 {day}
@@ -175,7 +173,7 @@ export default function VenueDetailPage() {
         </div>
       </div>
       {/* Pricing */}
-      <h2 className="text-xl font-bold text-accent mb-2">Pricing</h2>
+      <h2 className="text-xl font-bold text-black mb-2">Pricing</h2>
       <p className="mb-6 text-gray-700">
         Starting at ${mockVenue.price} per event. Contact us for custom quotes
         and package options.

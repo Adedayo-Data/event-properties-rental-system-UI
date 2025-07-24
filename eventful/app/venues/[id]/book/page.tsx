@@ -22,14 +22,12 @@ export default function BookVenuePage() {
 
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold text-accent mb-6">
-        Reserve your space
-      </h1>
+      <h1 className="text-2xl font-bold text-black mb-6">Reserve your space</h1>
       {/* Venue Info */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <div className="text-sm text-gray-500 mb-1">Selected venue</div>
-          <div className="font-bold text-accent">{mockVenue.name}</div>
+          <div className="font-bold text-black">{mockVenue.name}</div>
           <div className="text-xs text-gray-400">{mockVenue.location}</div>
         </div>
         <div className="w-40 h-24 rounded-xl overflow-hidden shadow-lg">
@@ -44,11 +42,11 @@ export default function BookVenuePage() {
       </div>
       {/* Calendar */}
       <div className="mb-8">
-        <div className="font-semibold text-accent mb-2">Select date</div>
+        <div className="font-semibold text-black mb-2">Select date</div>
         <div className="flex gap-8">
           {months.map((month, idx) => (
             <div key={month.name} className="flex-1">
-              <div className="text-sm font-semibold text-accent mb-2 flex items-center justify-between">
+              <div className="text-sm font-semibold text-black mb-2 flex items-center justify-between">
                 {idx === 0 && <span>&lt;</span>}
                 {month.name}
                 {idx === months.length - 1 && <span>&gt;</span>}
@@ -66,7 +64,7 @@ export default function BookVenuePage() {
                       className={`py-1 rounded-full ${
                         month.selected.includes(day)
                           ? "bg-primary text-white"
-                          : "text-accent"
+                          : "text-black"
                       }`}
                     >
                       {day}
@@ -80,7 +78,7 @@ export default function BookVenuePage() {
       </div>
       {/* Guests */}
       <div className="mb-8">
-        <label className="block font-semibold text-accent mb-2">
+        <label className="block font-semibold text-black mb-2">
           Number of guests
         </label>
         <input
@@ -93,14 +91,14 @@ export default function BookVenuePage() {
       </div>
       {/* Total Price */}
       <div className="mb-8">
-        <div className="font-semibold text-accent mb-1">Total price</div>
+        <div className="font-semibold text-black mb-1">Total price</div>
         <div className="text-lg font-bold text-primary">
           Total: ${mockVenue.price.toLocaleString()}
         </div>
       </div>
       {/* Payment Method */}
       <div className="mb-8">
-        <div className="font-semibold text-accent mb-2">Payment method</div>
+        <div className="font-semibold text-black mb-2">Payment method</div>
         <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2 border rounded-xl px-4 py-3 cursor-pointer">
             <input

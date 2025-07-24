@@ -54,7 +54,7 @@ const FeaturedVenues = () => {
             </div>
             <div className="p-4 flex-1 flex flex-col justify-between">
               <div>
-                <h3 className="text-xl font-bold text-accent mb-1">
+                <h3 className="text-xl font-bold text-black mb-1">
                   {venue.name}
                 </h3>
                 <p className="text-gray-600 text-sm mb-2">{venue.location}</p>
