@@ -88,9 +88,9 @@ export default function VenuesPage() {
       <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row gap-8 py-10 px-4">
         {/* Sidebar Filters */}
         <aside className="w-full md:w-64 bg-white rounded-xl shadow-lg p-6 mb-6 md:mb-0">
-          <h3 className="text-lg font-bold text-accent mb-4">Filters</h3>
+          <h3 className="text-lg font-bold text-black mb-4">Filters</h3>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-accent mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Price Range
             </label>
             <div className=" gap-2">
@@ -102,11 +102,11 @@ export default function VenuesPage() {
                 onChange={(e) => setPrice([+e.target.value, price[1]])}
                 className="w-full accent-primary"
               />
-              <span className="text-sm">${price[0]}</span>
+              <span className="text-sm text-gray-500 pl-44">${price[0]}</span>
             </div>
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-accent mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Capacity
             </label>
             <input
@@ -122,7 +122,7 @@ export default function VenuesPage() {
             </div>
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-accent mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Location
             </label>
             <select
@@ -139,7 +139,7 @@ export default function VenuesPage() {
             </select>
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-accent mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Amenities
             </label>
             <select
@@ -158,7 +158,7 @@ export default function VenuesPage() {
         </aside>
         {/* Main Content */}
         <main className="flex-1">
-          <h1 className="text-3xl font-display font-bold text-accent mb-8">
+          <h1 className="text-3xl font-display font-bold text-black mb-8">
             Event Centers
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -179,7 +179,7 @@ export default function VenuesPage() {
                   </div>
                   <div className="p-4 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="text-lg font-bold text-accent mb-1">
+                      <h3 className="text-lg font-bold text-black mb-1">
                         {venue.name}
                       </h3>
                       <p className="text-gray-600 text-sm mb-1">
@@ -202,7 +202,7 @@ export default function VenuesPage() {
           </div>
           {/* Pagination (static for now) */}
           <div className="flex justify-center mt-8 gap-2">
-            <Button variant="outline" className="rounded-full px-3 py-1">
+            <Button variant="outline" className="rounded-full px-3 py-1 ">
               &lt;
             </Button>
             <Button

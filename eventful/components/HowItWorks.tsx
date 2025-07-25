@@ -34,7 +34,7 @@ const HowItWorks = () => (
           className="bg-white/80 rounded-xl shadow p-6 flex flex-col items-center text-center max-w-xs"
         >
           {step.icon}
-          <h3 className="text-xl font-bold text-accent mb-2">{step.title}</h3>
+          <h3 className="text-xl font-bold text-black mb-2">{step.title}</h3>
           <p className="text-gray-700">{step.desc}</p>
         </div>
       ))}
