@@ -51,7 +51,7 @@ export default function ContactForm() {
       <h1 className="text-4xl font-bold mb-4 text-center">Contact Us</h1>
       <div className="flex justify-center">
         <div className="border border-gray-300 rounded-md shadow-md p-8 max-w-md w-full bg-white">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-10">
             <div>
               <Label htmlFor="name">Full Name</Label>
               <Input
@@ -61,7 +61,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 aria-invalid={!!errors.name}
                 aria-describedby="name-error"
-                className="w-full"
+                className="w-full mt-1"
               />
               {errors.name && (
                 <p id="name-error" className="text-red-600 text-sm mt-1">
@@ -79,7 +79,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 aria-invalid={!!errors.email}
                 aria-describedby="email-error"
-                className="w-full"
+                className="w-full mt-1"
               />
               {errors.email && (
                 <p id="email-error" className="text-red-600 text-sm mt-1">
@@ -96,7 +96,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 aria-invalid={!!errors.subject}
                 aria-describedby="subject-error"
-                className="w-full"
+                className="w-full mt-1"
               />
               {errors.subject && (
                 <p id="subject-error" className="text-red-600 text-sm mt-1">
@@ -114,7 +114,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 aria-invalid={!!errors.message}
                 aria-describedby="message-error"
-                className="w-full"
+                className="w-full mt-1"
               />
               {errors.message && (
                 <p id="message-error" className="text-red-600 text-sm mt-1">
@@ -122,7 +122,11 @@ export default function ContactForm() {
                 </p>
               )}
             </div>
-            <Button type="submit" disabled={Object.keys(errors).length > 0}>
+            <Button
+              type="submit"
+              disabled={Object.keys(errors).length > 0}
+              className="ml-65"
+            >
               Send Message
             </Button>
           </form>
