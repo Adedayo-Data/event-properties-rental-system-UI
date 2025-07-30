@@ -154,10 +154,16 @@ export default function BookingsPage() {
   );
   const [showDetails, setShowDetails] = React.useState(false);
   const [showSupport, setShowSupport] = React.useState(false);
-  const [supportForm, setSupportForm] = React.useState({
+  type SupportFormState = {
+    subject: string;
+    message: string;
+    priority: "low" | "medium" | "high";
+  };
+
+  const [supportForm, setSupportForm] = React.useState<SupportFormState>({
     subject: "",
     message: "",
-    priority: "medium" as const,
+    priority: "medium",
   });
 
   const tabs: { id: TabId; label: string; count: number }[] = [
@@ -269,7 +275,7 @@ function EmptyState({ activeTab }: { activeTab: TabId }) {
         No bookings found
       </h3>
       <p className="text-gray-500">
-        You don't have any {activeTab} bookings at the moment.
+        You don&apost have any {activeTab} bookings at the moment.
       </p>
     </div>
   );

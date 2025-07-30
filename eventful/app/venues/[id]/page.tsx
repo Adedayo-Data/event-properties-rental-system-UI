@@ -92,7 +92,7 @@ export default function VenueDetailPage() {
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          {[5, 4, 3, 2, 1].map((star, idx) => (
+          {[5, 4, 3, 2, 1].map((star) => (
             <div key={star} className="flex items-center gap-2">
               <span className="text-xs text-gray-500 w-4">{star}</span>
               <RatingBar percent={mockVenue.ratingsBreakdown[5 - star]} />
@@ -179,7 +179,7 @@ export default function VenueDetailPage() {
         and package options.
       </p>
       <Link href={`/venues/${id}/book`}>
-        <Button className="bg-primary text-white hover:bg-accent hover:text-primary px-8 py-3 rounded-xl font-bold w-full mt-2">
+        <Button className="bg-black text-white hover:bg-accent hover:text-primary px-8 py-3 rounded-xl font-bold w-full mt-2">
           Book Now
         </Button>
       </Link>

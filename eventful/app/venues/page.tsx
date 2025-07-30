@@ -100,7 +100,7 @@ export default function VenuesPage() {
                 max={1000}
                 value={price[0]}
                 onChange={(e) => setPrice([+e.target.value, price[1]])}
-                className="w-full accent-primary"
+                className="w-full border border-accent-primar rounded-2xl py-1 px-1"
               />
               <span className="text-sm text-gray-500 pl-44">${price[0]}</span>
             </div>
@@ -115,7 +115,7 @@ export default function VenuesPage() {
               max={400}
               value={capacity}
               onChange={(e) => setCapacity(+e.target.value)}
-              className="w-full accent-primary"
+              className="w-full border border-accent-primar rounded-2xl py-1 px-1"
             />
             <div className="text-xs text-gray-500 mt-1 text-right">
               {capacity}
@@ -192,7 +192,7 @@ export default function VenuesPage() {
                         {venue.amenities.join(", ")}
                       </p>
                     </div>
-                    <Button className="mt-auto px-4 py-2 rounded-xl bg-primary text-white font-semibold hover:bg-accent hover:text-primary transition-colors">
+                    <Button className="mt-auto px-4 py-2 rounded-xl bg-black text-white font-semibold hover:bg-accent hover:text-primary transition-colors">
                       View Details
                     </Button>
                   </div>
@@ -207,7 +207,7 @@ export default function VenuesPage() {
             </Button>
             <Button
               variant="outline"
-              className="rounded-full px-3.5 py-1 bg-primary text-white"
+              className="rounded-full px-3.5 py-1 bg-black text-white"
             >
               1
             </Button>

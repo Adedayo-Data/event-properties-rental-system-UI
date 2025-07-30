@@ -48,9 +48,11 @@ export default function SignupForm() {
       <p className="text-4xl font-bold mb-4 text-center pt-8">Sign In</p>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 max-w-md mx-auto p-6 mt-5 border border-gray-300 rounded-md shadow-md bg-white"
+        className="space-y-8 max-w-md mx-auto p-6 mt-5 border border-gray-300 rounded-md shadow-md bg-white"
       >
-        <p className="text-4xl font-bold mb-4 text-center pt-8 pb-5">KV</p>
+        <div className="w-15 h-15 bg-gradient-green rounded-xl ml-45 flex items-center justify-center shadow-green group-hover:scale-105 transition-transform duration-200">
+          <span className="text-white font-display font-bold text-xl">E</span>
+        </div>
         <div>
           <Label htmlFor="name">Full Name</Label>
           <Input
@@ -60,7 +62,7 @@ export default function SignupForm() {
             onChange={handleChange}
             aria-invalid={!!errors.name}
             aria-describedby="name-error"
-            className="w-full"
+            className="w-full mt-1"
           />
           {errors.name && (
             <p id="name-error" className="text-red-600 text-sm mt-1">
@@ -78,7 +80,7 @@ export default function SignupForm() {
             onChange={handleChange}
             aria-invalid={!!errors.email}
             aria-describedby="email-error"
-            className="w-full"
+            className="w-full mt-1"
           />
           {errors.email && (
             <p id="email-error" className="text-red-600 text-sm mt-1">
@@ -96,7 +98,7 @@ export default function SignupForm() {
             onChange={handleChange}
             aria-invalid={!!errors.password}
             aria-describedby="password-error"
-            className="w-full"
+            className="w-full mt-1"
           />
           {errors.password && (
             <p id="password-error" className="text-red-600 text-sm mt-1">
@@ -114,7 +116,7 @@ export default function SignupForm() {
             onChange={handleChange}
             aria-invalid={!!errors.password}
             aria-describedby="password-error"
-            className="w-full"
+            className="w-full mt-1"
           />
           {errors.password && (
             <p id="password-error" className="text-red-600 text-sm mt-1">
@@ -131,7 +133,7 @@ export default function SignupForm() {
         </Button>
         <p className="text-center text-sm">
           Already have an account ?{" "}
-          <Link href="/signin" className="text-blue-500">
+          <Link href="/signin" className="text-green-500">
             Login
           </Link>
         </p>

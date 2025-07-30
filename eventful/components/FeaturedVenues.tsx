@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 
 const venues = [
   {
@@ -33,41 +36,126 @@ const venues = [
 ];
 
 const FeaturedVenues = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 50,
+      scale: 0.9 
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <section className="mb-12">
-      <h2 className="text-3xl font-display font-bold text-primary mb-6 text-center">
+    <motion.section 
+      className="mb-12"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      <motion.h2 
+        className="text-3xl font-display font-bold text-primary mb-6 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         Featured Venues
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {venues.map((venue) => (
-          <div
+      </motion.h2>
+      
+      <motion.div 
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+      >
+        {venues.map((venue, index) => (
+          <motion.div
             key={venue.id}
-            className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col border"
+            className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col border border-gray-400"
+            variants={cardVariants}
+            whileHover={{ 
+              y: -8, 
+              scale: 1.02,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+              transition: { duration: 0.3 }
+            }}
+            whileTap={{ scale: 0.98 }}
           >
-            <div className="relative h-40 w-full">
+            <motion.div 
+              className="relative h-40 w-full overflow-hidden"
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.4 }}
+            >
               <Image
                 src={venue.image}
                 alt={venue.name}
                 fill
                 className="object-cover"
               />
-            </div>
+            </motion.div>
+            
             <div className="p-4 flex-1 flex flex-col justify-between">
               <div>
-                <h3 className="text-xl font-bold text-black mb-1">
+                <motion.h3 
+                  className="text-xl font-bold text-black mb-1"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.2 + index * 0.1 }}
+                >
                   {venue.name}
-                </h3>
-                <p className="text-gray-600 text-sm mb-2">{venue.location}</p>
-                <p className="text-primary font-semibold mb-4">{venue.price}</p>
+                </motion.h3>
+                <motion.p 
+                  className="text-gray-600 text-sm mb-2"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                >
+                  {venue.location}
+                </motion.p>
+                <motion.p 
+                  className="text-primary font-semibold mb-4"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                >
+                  {venue.price}
+                </motion.p>
               </div>
-              <Button className="mt-auto px-4 py-2 rounded-xl bg-primary text-white font-semibold hover:bg-accent hover:text-primary transition-colors">
-                Book Now
-              </Button>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + index * 0.1 }}
+              >
+                <Button className="mt-auto px-4 py-2 rounded-xl bg-black text-white font-semibold hover:bg-accent hover:text-primary transition-colors w-full">
+                  Book Now
+                </Button>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 };
 

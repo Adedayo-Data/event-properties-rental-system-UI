@@ -3,69 +3,118 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "motion/react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const menuItems = [
+    { href: "/", label: "Home" },
+    { href: "/venues", label: "Venues" },
+    { href: "/bookings", label: "Bookings" },
+    { href: "/contact", label: "Contact" },
+  ];
+
   return (
-    <nav className="relative bg-white shadow-md z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <motion.nav 
+      className="bg-white/95 backdrop-blur-md shadow-soft z-50 sticky top-0"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="max-w-9xl px-4 sm:px-6 lg:px-10">
         <div className="flex justify-between h-16 items-center">
           {/* Logo/Brand */}
-          <div className="flex-shrink-0 flex items-center gap-2">
-            <p className="text-3xl font-display font-bold text-primary">KV</p>
-            <span className="text-lg font-display font-bold text-primary">
-              KptVent
-            </span>
-          </div>
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8 items-center text-primary z-30 relative">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <Link
               href="/"
-              className="text-black hover:text-green-300 font-medium transition-colors"
+              className="flex-shrink-0 flex items-center gap-3 group"
             >
-              Home
+              <motion.div 
+                className="w-10 h-10 bg-gradient-green rounded-xl flex items-center justify-center shadow-green"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <span className="text-white font-display font-bold text-lg">
+                  E
+                </span>
+              </motion.div>
+              <div className="flex flex-col">
+                <span className="text-xl font-display font-bold text-dark-900 group-hover:text-primary-600 transition-colors">
+                  Eventful
+                </span>
+              </div>
             </Link>
+          </motion.div>
+
+          {/* Desktop Menu */}
+          <motion.div 
+            className="hidden md:flex space-x-8 items-center gap-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            {menuItems.map((item, index) => (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+              >
+                <Link
+                  href={item.href}
+                  className="text-dark-700 hover:text-primary-600 font-medium transition-all duration-200 hover:scale-105 relative group"
+                >
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-200 group-hover:w-full"></span>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* CTA Button */}
+          <motion.div 
+            className="flex items-center gap-7 mr-5"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             <Link
-              href="/venues"
-              className="text-black hover:text-green-300  font-medium transition-colors"
+              href="/signin"
+              className="hidden sm:block text-dark-700 hover:text-primary-600 font-medium transition-colors"
             >
-              Venues
+              Sign In
             </Link>
-            <Link
-              href="/bookings"
-              className="text-black hover:text-green-300  font-medium transition-colors"
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Bookings
-            </Link>
-            <Link
-              href="/contact"
-              className="text-black hover:text-green-300 font-medium transition-colors"
-            >
-              Contact
-            </Link>
-          </div>
-          <Button className="bg-primary text-white hover:bg-accent hover:text-primary transition-colors">
-            <Link
-              href="/signup"
-              className="ml-2 px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              Register
-            </Link>
-          </Button>
+              <Button className="bg-gradient-green text-white hover:shadow-green-lg transition-all duration-200 font-semibold px-6 py-2 rounded-xl border-0">
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </motion.div>
+          </motion.div>
+
           {/* Mobile Hamburger */}
           <div className="md:hidden flex items-center">
-            <button
+            <motion.button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-accent hover:text-primary focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-xl text-dark-600 hover:text-primary-600 hover:bg-primary-50 focus:outline-none transition-all duration-200"
               aria-label="Toggle menu"
+              whileTap={{ scale: 0.95 }}
             >
-              <svg
+              <motion.svg
                 className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+                animate={{ rotate: menuOpen ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
               >
                 {menuOpen ? (
                   <path
@@ -82,47 +131,72 @@ const Navbar = () => {
                     d="M4 6h16M4 12h16M4 18h16"
                   />
                 )}
-              </svg>
-            </button>
+              </motion.svg>
+            </motion.button>
           </div>
         </div>
       </div>
+
       {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden px-4 pb-4 pt-2 space-y-2 z-40 relative bg-white">
-          <Link
-            href="/"
-            className="block text-black hover:text-green-300 font-medium transition-colors"
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div 
+            className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-dark-100 shadow-medium"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            Home
-          </Link>
-          <Link
-            href="/venues"
-            className="block text-black hover:text-green-300  font-medium transition-colors"
-          >
-            Venues
-          </Link>
-          <Link
-            href="/bookings"
-            className="block text-black hover:text-green-300  font-medium transition-colors"
-          >
-            Bookings
-          </Link>
-          <Link
-            href="/contact"
-            className="block text-black hover:text-green-300  font-medium transition-colors"
-          >
-            Contact
-          </Link>
-          <Link
-            href="/signup"
-            className="block mt-2 px-4 py-2 rounded-xl bg-primary text-white hover:bg-accent hover:text-primary font-semibold transition-colors"
-          >
-            Register
-          </Link>
-        </div>
-      )}
-    </nav>
+            <motion.div 
+              className="px-4 py-4 space-y-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
+            >
+              {menuItems.map((item, index) => (
+                <motion.div
+                  key={item.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <Link
+                    href={item.href}
+                    className="block text-dark-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-all duration-200 px-3 py-2 rounded-lg"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+              
+              <motion.div 
+                className="pt-3 border-t border-dark-100 space-y-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+              >
+                <Link
+                  href="/signin"
+                  className="block text-dark-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-all duration-200 px-3 py-2 rounded-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="block bg-gradient-green text-white hover:shadow-green font-semibold transition-all duration-200 px-5 py-3 rounded-lg text-center"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Get Started
+                </Link>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 

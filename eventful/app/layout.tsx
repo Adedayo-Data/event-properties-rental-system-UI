@@ -1,19 +1,25 @@
+"use client";
+
 import type React from "react";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { usePathname } from "next/navigation";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith("/admin");
+
   return (
     <html lang="en">
       <body>
-        <Navbar />
+        {!isAdminRoute && <Navbar />}
         {children}
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </body>
     </html>
   );
