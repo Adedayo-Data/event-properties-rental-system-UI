@@ -6,14 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "motion/react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [serverMessage, setServerMessage] = useState("");
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -31,13 +36,34 @@ export default function LoginForm() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      // Submit form or handle success
-      alert("Logged in successfully!");
-      setFormData({ email: "", password: "" });
-      setErrors({});
+    if (!validate()) return;
+
+    try {
+      setLoading(true);
+      setServerMessage("");
+
+      const res = await axios.post("http://localhost:8080/api/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Assuming backend returns { token: "...", ... }
+      if (res.data?.jwt) {
+        localStorage.setItem("token", res.data.jwt);
+        router.push("/"); // Redirect to home
+      } else {
+        setServerMessage("Unexpected server response.");
+      }
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        setServerMessage(error.response.data.message);
+      } else {
+        setServerMessage("Login failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
