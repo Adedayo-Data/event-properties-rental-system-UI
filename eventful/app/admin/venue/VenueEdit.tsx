@@ -25,7 +25,7 @@ const VenueEdit: React.FC<Props> = ({
       id: 0,
       name: "",
       location: "",
-      image: "",
+      image: [],
       description: "",
       price: 0,
       capacity: 0,
@@ -109,14 +109,17 @@ const VenueEdit: React.FC<Props> = ({
       body: formDataCloud,
     });
     const data = await res.json();
+    console.log("Image upload response:", data.secure_url);
     if (data.secure_url) {
-      setFormData((prev) => ({ ...prev, image: data.secure_url }));
+      setFormData((prev) => ({
+        ...prev,
+        image: [...prev.image, data.secure_url] // append, not replace
+      }));
     }
   } catch (error) {
     console.error("Image upload failed:", error);
   }
 };
-
 
   return (
     <motion.div
@@ -252,9 +255,27 @@ const VenueEdit: React.FC<Props> = ({
               />
 
               {/* Show preview if image uploaded */}
-              {formData.image && (
+              {/* {formData.image && (
                 <img src={formData.image} alt="Venue" className="mt-4 w-full rounded-lg" />
-              )}
+              )} */}
+              <div className="grid grid-cols-3 gap-4 mt-4">
+              {formData.image.map((imgUrl, idx) => (
+                <div key={idx} className="relative">
+                  <img src={imgUrl} alt={`Venue ${idx}`} className="w-full rounded-lg" />
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({
+                      ...prev,
+                      image: prev.image.filter((_, i) => i !== idx)
+                    }))}
+                    className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
 
             </motion.div>
 
