@@ -272,14 +272,14 @@ export default function VenueDetailPage() {
           venue.image.map((img: string, i: number) => (
             <div
               key={i}
-              className="flex-1 rounded-xl overflow-hidden shadow-lg"
-            >
+              className="flex-1 aspect-video rounded-2xl overflow-hidden shadow-lg border border-gray-200"
+              >
               <Image
                 src={img}
                 alt={venue.name}
                 width={400}
-                height={200}
-                className="object-cover w-full h-40"
+                height={700}
+                className="object-cover w-full h-full"
               />
             </div>
           ))
@@ -290,12 +290,16 @@ export default function VenueDetailPage() {
 
       {/* Venue Name & Address */}
       <h1 className="text-3xl font-bold text-black mb-2">{venue.name}</h1>
-      <p className="text-gray-500 mb-1">{venue.shortDescription}</p>
-      <p className="text-primary font-medium mb-4">{venue.address}</p>
+      {/* <p className="text-gray-500 mb-1">{venue.shortDescription}</p> */}
+      <p className="text-gray-500 mb-1">
+      Located in the heart of downtown, this elegant ballroom is perfect for
+      weddings, corporate events, and galas.
+     </p>
+      <p className="text-primary font-medium mb-4">{venue.location}</p>
 
       {/* About */}
       <h2 className="text-xl font-bold text-black mb-2">About This Venue</h2>
-      <p className="text-gray-700 mb-4">{venue.about}</p>
+      <p className="text-gray-700 mb-4">{venue.description}</p>
 
       {/* Amenities */}
       <h2 className="text-xl font-bold text-black mb-2">Amenities</h2>
@@ -317,6 +321,47 @@ export default function VenueDetailPage() {
         ) : (
           <p>No amenities listed</p>
         )}
+      </div>
+      {/* Availability */}
+      <h2 className="text-xl font-bold text-black mb-2">Availability</h2>
+      <div className="flex flex-col md:flex-row gap-8 mb-6 w-full">
+        {[0, 1].map((monthOffset) => {
+          const today = new Date();
+          const monthDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+          const month = monthDate.toLocaleString("default", { month: "long" });
+          const year = monthDate.getFullYear();
+          const daysInMonth = new Date(year, monthDate.getMonth() + 1, 0).getDate();
+          const availableDates = venue.availableDates || [];
+
+          return (
+            <div key={monthOffset} className="flex-1">
+              <div className="text-sm font-semibold text-black mb-2">
+                {month} {year}
+              </div>
+              <div className="grid grid-cols-7 gap-1 text-xs text-center">
+                {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+                  <div key={i} className="font-bold text-gray-500">
+                    {d}
+                  </div>
+                ))}
+                {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
+                  const dateStr = `${year}-${String(monthDate.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                  const isAvailable = availableDates.includes(dateStr);
+                  return (
+                    <div
+                      key={day}
+                      className={`py-1 rounded-full ${
+                        isAvailable ? "bg-primary text-white" : "text-black"
+                      }`}
+                    >
+                      {day}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Pricing */}

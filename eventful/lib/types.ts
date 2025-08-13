@@ -15,7 +15,7 @@ export interface Venue {
   id: number;
   name: string;
   location: string;
-  image: string;
+  image: string[];
   description: string;
   price: number;
   capacity: number;
