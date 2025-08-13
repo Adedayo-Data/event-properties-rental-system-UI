@@ -1,12 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const pathname = usePathname();
+
+   useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    setIsLoggedIn(!!token);
+  }, [pathname]);
+
+
+  // React to explicit auth changes (login/logout) in the same tab
+  useEffect(() => {
+    const handleAuthChanged = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+    window.addEventListener("auth-changed", handleAuthChanged);
+    return () => window.removeEventListener("auth-changed", handleAuthChanged);
+  }, []);
+  if (isLoggedIn === null) {
+    // Optional: show loading skeleton to avoid flash
+    return null;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setAvatarMenuOpen(false);
+  }
 
   const menuItems = [
     { href: "/", label: "Home" },
@@ -14,6 +44,13 @@ const Navbar = () => {
     { href: "/bookings", label: "Bookings" },
     { href: "/contact", label: "Contact" },
   ];
+
+  const avatarMenuItems = [
+    { href: "/profile", label: "Profile" },
+    { href: "/settings", label: "Settings" },
+    { href: "/logout", label: "Logout" },
+  ];
+
 
   return (
     <motion.nav 
@@ -77,27 +114,52 @@ const Navbar = () => {
             ))}
           </motion.div>
 
-          {/* CTA Button */}
-          <motion.div 
-            className="flex items-center gap-7 mr-5"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Link
-              href="/signin"
-              className="hidden sm:block text-dark-700 hover:text-primary-600 font-medium transition-colors"
-            >
-              Sign In
-            </Link>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button className="bg-gradient-green text-white hover:shadow-green-lg transition-all duration-200 font-semibold px-6 py-2 rounded-xl border-0">
-                <Link href="/signup">Get Started</Link>
-              </Button>
-            </motion.div>
+          {/* Auth / Avatar */}
+          <motion.div className="flex items-center gap-7 mr-5 relative">
+            {isLoggedIn ? (
+              <div className="relative">
+                <motion.div
+                  className="w-10 h-10 rounded-full bg-gradient-green flex items-center justify-center cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setAvatarMenuOpen((prev) => !prev)}
+                >
+                  <span className="text-white font-bold">U</span>
+                  {/* Replace 'U' with <img src={userImage} ... /> when available */}
+                </motion.div>
+                <AnimatePresence>
+                  {avatarMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-3 w-40 bg-white shadow-lg rounded-lg overflow-hidden border border-dark-100"
+                    >
+                      {avatarMenuItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block px-4 py-2 text-dark-700 hover:bg-primary-50 hover:text-primary-600"
+                          onClick={() => setAvatarMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <>
+                <Link href="/signin" className="hidden sm:block text-dark-700 hover:text-primary-600 font-medium transition-colors">
+                  Sign In
+                </Link>
+                <Button className="bg-gradient-green text-white hover:shadow-green-lg transition-all duration-200 font-semibold px-6 py-2 rounded-xl border-0">
+                  <Link href="/signup">Get Started</Link>
+                </Button>
+              </>
+            )}
           </motion.div>
 
           {/* Mobile Hamburger */}
@@ -201,3 +263,27 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+// {/* CTA Button */}
+          // <motion.div 
+          //   className="flex items-center gap-7 mr-5"
+          //   initial={{ opacity: 0, x: 20 }}
+          //   animate={{ opacity: 1, x: 0 }}
+          //   transition={{ duration: 0.6, delay: 0.4 }}
+          // >
+          //   <Link
+          //     href="/signin"
+          //     className="hidden sm:block text-dark-700 hover:text-primary-600 font-medium transition-colors"
+          //   >
+          //     Sign In
+          //   </Link>
+          //   <motion.div
+          //     whileHover={{ scale: 1.05 }}
+          //     whileTap={{ scale: 0.95 }}
+          //   >
+          //     <Button className="bg-gradient-green text-white hover:shadow-green-lg transition-all duration-200 font-semibold px-6 py-2 rounded-xl border-0">
+          //       <Link href="/signup">Get Started</Link>
+          //     </Button>
+          //   </motion.div>
+          // </motion.div>
