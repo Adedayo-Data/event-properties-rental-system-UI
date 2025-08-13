@@ -1,79 +1,138 @@
+// "use client";
+
+// import { useState } from "react";
+// import Image from "next/image";
+// import { Button } from "@/components/ui/button";
+// import Link from "next/link";
+
+// const allVenues = [
+//   {
+//     id: 1,
+//     name: "The Grand Ballroom",
+//     location: "Downtown, Metropolis",
+//     price: 800,
+//     capacity: 300,
+//     amenities: ["Parking", "WiFi"],
+//   },
+//   {
+//     id: 2,
+//     name: "The Lakeside Pavilion",
+//     location: "Lakeside, Suburbia",
+//     price: 400,
+//     capacity: 120,
+//     amenities: ["WiFi"],
+//   },
+//   {
+//     id: 3,
+//     name: "The Urban Loft",
+//     location: "City Center, Metropolis",
+//     price: 600,
+//     capacity: 200,
+//     amenities: ["Parking"],
+//   },
+//   {
+//     id: 4,
+//     name: "The Rustic Barn",
+//     location: "Countryside, Rural",
+//     price: 300,
+//     capacity: 100,
+//     amenities: ["Parking", "WiFi"],
+//   },
+//   {
+//     id: 5,
+//     name: "The Skyview Terrace",
+//     location: "Rooftop, Metropolis",
+//     price: 1000,
+//     capacity: 400,
+//     amenities: ["WiFi"],
+//   },
+//   {
+//     id: 6,
+//     name: "The Garden Oasis",
+//     location: "Botanical Gardens, Suburbia",
+//     price: 200,
+//     capacity: 80,
+//     amenities: ["Parking"],
+//   },
+// ];
+
+// const locations = [
+//   "Downtown, Metropolis",
+//   "Lakeside, Suburbia",
+//   "City Center, Metropolis",
+//   "Countryside, Rural",
+//   "Rooftop, Metropolis",
+//   "Botanical Gardens, Suburbia",
+// ];
+
+// const amenities = ["Parking", "WiFi"];
+
+// export default function VenuesPage() {
+//   const [price, setPrice] = useState([100, 1000]);
+//   const [capacity, setCapacity] = useState(50);
+//   const [location, setLocation] = useState("");
+//   const [amenity, setAmenity] = useState("");
+
+//   const filteredVenues = allVenues.filter((venue) => {
+//     return (
+//       venue.price >= price[0] &&
+//       venue.price <= price[1] &&
+//       venue.capacity >= capacity &&
+//       (location === "" || venue.location === location) &&
+//       (amenity === "" || venue.amenities.includes(amenity))
+//     );
+//   });
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const allVenues = [
-  {
-    id: 1,
-    name: "The Grand Ballroom",
-    location: "Downtown, Metropolis",
-    price: 800,
-    capacity: 300,
-    amenities: ["Parking", "WiFi"],
-  },
-  {
-    id: 2,
-    name: "The Lakeside Pavilion",
-    location: "Lakeside, Suburbia",
-    price: 400,
-    capacity: 120,
-    amenities: ["WiFi"],
-  },
-  {
-    id: 3,
-    name: "The Urban Loft",
-    location: "City Center, Metropolis",
-    price: 600,
-    capacity: 200,
-    amenities: ["Parking"],
-  },
-  {
-    id: 4,
-    name: "The Rustic Barn",
-    location: "Countryside, Rural",
-    price: 300,
-    capacity: 100,
-    amenities: ["Parking", "WiFi"],
-  },
-  {
-    id: 5,
-    name: "The Skyview Terrace",
-    location: "Rooftop, Metropolis",
-    price: 1000,
-    capacity: 400,
-    amenities: ["WiFi"],
-  },
-  {
-    id: 6,
-    name: "The Garden Oasis",
-    location: "Botanical Gardens, Suburbia",
-    price: 200,
-    capacity: 80,
-    amenities: ["Parking"],
-  },
-];
 
-const locations = [
-  "Downtown, Metropolis",
-  "Lakeside, Suburbia",
-  "City Center, Metropolis",
-  "Countryside, Rural",
-  "Rooftop, Metropolis",
-  "Botanical Gardens, Suburbia",
-];
-
-const amenities = ["Parking", "WiFi"];
+// Venue type definition
+type Venue = {
+  id: number;
+  name: string;
+  location: string;
+  price: number;
+  capacity: number;
+  amenities: string[];
+};
 
 export default function VenuesPage() {
+
+  const [venues, setVenues] = useState<Venue[]>([]);
+  const [loading, setLoading] = useState(true);
   const [price, setPrice] = useState([100, 1000]);
   const [capacity, setCapacity] = useState(50);
   const [location, setLocation] = useState("");
   const [amenity, setAmenity] = useState("");
 
-  const filteredVenues = allVenues.filter((venue) => {
+  const locations: string[] = ["Lagos", "Kaduna", "Abuja", "Port Harcourt", "Ibadan", "Benin City"];
+  const amenities: string[] = ["Wi-Fi", "Parking", "Projector", "Catering", "Sound System", "Air Conditioning"];
+
+  useEffect(() => {
+  async function fetchVenues() {
+    try {
+      const res = await fetch("http://localhost:8080/api/venues");
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      const data = await res.json();
+      setVenues(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error fetching venues:", err);
+      setVenues([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  fetchVenues();
+}, []);
+
+
+  const filteredVenues = venues.filter((venue) => {
     return (
       venue.price >= price[0] &&
       venue.price <= price[1] &&
@@ -82,6 +141,15 @@ export default function VenuesPage() {
       (amenity === "" || venue.amenities.includes(amenity))
     );
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p>Loading venues...</p>
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-gray flex flex-col">

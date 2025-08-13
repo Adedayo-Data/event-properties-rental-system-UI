@@ -1,5 +1,5 @@
 export interface Booking {
-  id: string;
+  id: number;
   venue: string;
   user: string;
   date: string;
@@ -12,7 +12,7 @@ export interface Booking {
 }
 
 export interface Venue {
-  id: string;
+  id: number;
   name: string;
   location: string;
   image: string;
@@ -24,7 +24,7 @@ export interface Venue {
 }
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   joinDate: string;

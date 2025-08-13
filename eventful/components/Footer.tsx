@@ -28,7 +28,7 @@ const Footer = () => {
             </div>
             <p className="text-dark-300 text-lg mb-6 max-w-md leading-relaxed">
               Your trusted partner for finding and booking the perfect event
-              venues. Making memorable moments happen since 2024.
+              venues. Making memorable moments happen since forever.
             </p>
 
             {/* Social Links */}
