@@ -7,7 +7,7 @@ import {
   X,
   MapPin,
   Users,
-  DollarSign,
+  DollarSign, //To Fix
   Wifi,
   Car,
   Camera,
@@ -127,7 +127,7 @@ const VenueView: React.FC<Props> = ({
                   <p className="text-2xl font-bold text-blue-700">
                     ${venue.price}
                   </p>
-                  <p className="text-sm text-blue-600">per night</p>
+                  <p className="text-sm text-blue-600">per Day</p>
                 </div>
 
                 <div className="bg-green-50 p-4 rounded-lg">

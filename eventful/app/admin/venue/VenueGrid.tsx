@@ -37,19 +37,51 @@ const VenueGrid: React.FC<Props> = ({ venues, getStatusColor }) => {
     setIsCreating(true);
   };
 
-  const handleSave = (venue: Venue) => {
-    if (isCreating) {
-      setVenueList(prev => [...prev, venue]);
-    } else {
-      setVenueList(prev => prev.map(v => v.id === venue.id ? venue : v));
-    }
-  };
+  // const handleSave = (venue: Venue) => {
+  //   if (isCreating) {
+  //     setVenueList(prev => [...prev, venue]);
+  //   } else {
+  //     setVenueList(prev => prev.map(v => v.id === venue.id ? venue : v));
+  //   }
+  // };
 
   const closeModals = () => {
     setIsViewOpen(false);
     setIsEditOpen(false);
     setSelectedVenue(null);
     setIsCreating(false);
+  };
+  
+  const handleSave = async (venue: Venue) => {
+    try {
+      const method = isCreating ? "POST" : "PUT";
+      const url = isCreating
+        ? "http://localhost:8080/api/venues"
+        : `http://localhost:8080/api/venues/${venue.id}`;
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(venue),
+      });
+
+      if (!res.ok) throw new Error("Failed to save venue");
+
+      const savedVenue: Venue = await res.json();
+
+      if (isCreating) {
+        setVenueList((prev) => [...prev, savedVenue]);
+      } else {
+        setVenueList((prev) =>
+          prev.map((v) => (v.id === savedVenue.id ? savedVenue : v))
+        );
+      }
+
+      closeModals();
+    } catch (err) {
+      console.error(err);
+      alert("Could not save venue. Please try again.");
+    }
   };
 
   return (

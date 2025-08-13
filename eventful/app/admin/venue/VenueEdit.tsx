@@ -22,10 +22,10 @@ const VenueEdit: React.FC<Props> = ({
 }) => {
   const [formData, setFormData] = useState<Venue>(
     venue || {
-      id: "",
+      id: 0,
       name: "",
       location: "",
-      image: "/images/Background.jpeg",
+      image: "",
       description: "",
       price: 0,
       capacity: 0,
@@ -57,10 +57,8 @@ const VenueEdit: React.FC<Props> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      const venueToSave = {
-        ...formData,
-        id: isCreating ? Date.now().toString() : formData.id,
-      };
+      const venueToSave = { ...formData };
+      if (isCreating) delete (venueToSave as any).id;
       onSave(venueToSave);
       onClose();
     }
@@ -96,6 +94,29 @@ const VenueEdit: React.FC<Props> = ({
       ),
     }));
   };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const formDataCloud = new FormData();
+  formDataCloud.append("file", file);
+  formDataCloud.append("upload_preset", "eventful"); // from Cloudinary
+
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/drzcrx4he/image/upload`, {
+      method: "POST",
+      body: formDataCloud,
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      setFormData((prev) => ({ ...prev, image: data.secure_url }));
+    }
+  } catch (error) {
+    console.error("Image upload failed:", error);
+  }
+};
+
 
   return (
     <motion.div
@@ -199,7 +220,7 @@ const VenueEdit: React.FC<Props> = ({
               </div>
 
               {/* Image Upload */}
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Venue Image
                 </label>
@@ -210,7 +231,31 @@ const VenueEdit: React.FC<Props> = ({
                   </p>
                   <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
                 </div>
+              </div> */}
+              <div
+                className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer"
+                onClick={() => document.getElementById("venueImageInput")?.click()}
+              >
+                <Upload size={32} className="mx-auto text-gray-400 mb-2" />
+                <p className="text-sm text-gray-600">
+                  Click to upload or drag and drop
+                </p>
+                <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
               </div>
+
+              <input
+                id="venueImageInput"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+
+              {/* Show preview if image uploaded */}
+              {formData.image && (
+                <img src={formData.image} alt="Venue" className="mt-4 w-full rounded-lg" />
+              )}
+
             </motion.div>
 
             {/* Right Column */}
@@ -224,7 +269,7 @@ const VenueEdit: React.FC<Props> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price per Night *
+                    Price per Day *
                   </label>
                   <input
                     type="number"
