@@ -350,9 +350,12 @@ export default function VenueDetailPage() {
                   return (
                     <div
                       key={day}
-                      className={`py-1 rounded-full ${
-                        isAvailable ? "bg-primary text-white" : "text-black"
-                      }`}
+                      className={`py-1 rounded-full flex items-center justify-center font-bold transition
+                        ${isAvailable
+                          ? "bg-green-500 text-white border-2 border-green-700 shadow-lg"
+                          : "bg-gray-100 text-black"
+                        }`}
+                      title={isAvailable ? "Available" : "Unavailable"}
                     >
                       {day}
                     </div>

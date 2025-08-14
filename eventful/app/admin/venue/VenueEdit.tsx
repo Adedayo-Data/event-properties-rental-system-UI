@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Venue } from "@/lib/types";
 import { motion } from "motion/react";
 import { X, Upload, Plus, Trash2 } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Props {
   venue: Venue | null;
@@ -31,11 +33,13 @@ const VenueEdit: React.FC<Props> = ({
       capacity: 0,
       status: "active",
       amenities: [],
+      availableDates: [],
     }
   );
 
   const [newAmenity, setNewAmenity] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   if (!isOpen) return null;
 
@@ -347,6 +351,49 @@ const VenueEdit: React.FC<Props> = ({
                   <option value="maintenance">Maintenance</option>
                 </select>
               </div>
+
+              {/* Available Dates */}
+              <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Available Dates
+              </label>
+              <div className="flex gap-2 items-center">
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => {
+                    if (!date) return;
+                    setSelectedDate(date);
+                    const isoDate = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+                    setFormData(prev => ({
+                      ...prev,
+                      availableDates: [...(prev.availableDates ?? []), isoDate]
+                    }));
+                  }}
+                  dateFormat="yyyy-MM-dd"
+                  className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="mt-3 space-y-1">
+                {(formData.availableDates || []).map((d, idx) => (
+                  <div key={idx} className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                    <span>{d}</span>
+                    <button
+                      type="button"
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() =>
+                        setFormData(prev => ({
+                          ...prev,
+                          availableDates: prev.availableDates.filter(date => date !== d)
+                        }))
+                      }
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
 
               {/* Amenities */}
               <div>

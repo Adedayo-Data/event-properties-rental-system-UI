@@ -21,6 +21,7 @@ export interface Venue {
   capacity: number;
   status: string;
   amenities: string[];
+  availableDates: string[]; // Array of available dates in ISO format
 }
 
 export interface User {

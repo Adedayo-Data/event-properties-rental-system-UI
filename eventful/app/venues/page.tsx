@@ -99,6 +99,7 @@ type Venue = {
   price: number;
   capacity: number;
   amenities: string[];
+  image:string[];
 };
 
 export default function VenuesPage() {
@@ -239,7 +240,7 @@ export default function VenuesPage() {
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col group-hover:shadow-xl transition-shadow">
                   <div className="relative h-32 w-full">
                     <Image
-                      src="/images/Background.jpeg"
+                      src={venue.image[0]}
                       alt={venue.name}
                       fill
                       className="object-cover"

@@ -26,7 +26,7 @@ const VenueCard: React.FC<Props> = ({ venue, getStatusColor, onView, onEdit }) =
       transition={{ duration: 0.3 }}
     >
       <img
-        src={venue.image}
+        src={venue.image[0]}
         alt={venue.name}
         className="w-full h-48 object-cover"
       />
