@@ -370,7 +370,7 @@ export default function VenueDetailPage() {
       {/* Pricing */}
       <h2 className="text-xl font-bold text-black mb-2">Pricing</h2>
       <p className="mb-6 text-gray-700">
-        Starting at ${venue.price} per event. Contact us for custom quotes and
+        Starting at ₦{venue.price.toLocaleString()} per event. Contact us for custom quotes and
         package options.
       </p>
 

@@ -89,6 +89,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { venuesApi } from "@/lib/api";
 
 
 // Venue type definition
@@ -106,31 +107,42 @@ export default function VenuesPage() {
 
   const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
-  const [price, setPrice] = useState([100, 1000]);
+  const [price, setPrice] = useState([20000, 500000]);
   const [capacity, setCapacity] = useState(50);
   const [location, setLocation] = useState("");
   const [amenity, setAmenity] = useState("");
 
-  const locations: string[] = ["Lagos", "Kaduna", "Abuja", "Port Harcourt", "Ibadan", "Benin City"];
-  const amenities: string[] = ["Wi-Fi", "Parking", "Projector", "Catering", "Sound System", "Air Conditioning"];
+  const [locations, setLocations] = useState<string[]>([]);
+  const [amenities, setAmenities] = useState<string[]>([]);
 
+  // Fetch venues, locations, and amenities
   useEffect(() => {
-  async function fetchVenues() {
-    try {
-      const res = await fetch("http://localhost:8080/api/venues");
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      const data = await res.json();
-      setVenues(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Error fetching venues:", err);
-      setVenues([]);
-    } finally {
-      setLoading(false);
-    }
-  }
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch venues
+        const venuesData = await venuesApi.getAll();
+        setVenues(Array.isArray(venuesData) ? venuesData : []);
+        
+        // Fetch locations (with built-in fallback)
+        const locationsData = await venuesApi.getLocations();
+        setLocations(Array.isArray(locationsData) ? locationsData : []);
+        
+        // Fetch amenities (with built-in fallback)
+        const amenitiesData = await venuesApi.getAmenities();
+        setAmenities(Array.isArray(amenitiesData) ? amenitiesData : []);
+        
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setVenues([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchVenues();
-}, []);
+    fetchData();
+  }, []);
 
 
   const filteredVenues = venues.filter((venue) => {
@@ -165,13 +177,14 @@ export default function VenuesPage() {
             <div className=" gap-2">
               <input
                 type="range"
-                min={100}
-                max={1000}
+                min={20000}
+                max={500000}
+                step={5000}
                 value={price[0]}
                 onChange={(e) => setPrice([+e.target.value, price[1]])}
                 className="w-full border border-accent-primar rounded-2xl py-1 px-1"
               />
-              <span className="text-sm text-gray-500 pl-44">${price[0]}</span>
+              <span className="text-sm text-gray-500 pl-44">₦{price[0].toLocaleString()}</span>
             </div>
           </div>
           <div className="mb-6">
@@ -255,7 +268,7 @@ export default function VenuesPage() {
                         {venue.location}
                       </p>
                       <p className="text-primary font-semibold mb-2">
-                        ${venue.price} | {venue.capacity} guests
+                        ₦{venue.price.toLocaleString()} | {venue.capacity} guests
                       </p>
                       <p className="text-xs text-gray-500 mb-2">
                         {venue.amenities.join(", ")}
