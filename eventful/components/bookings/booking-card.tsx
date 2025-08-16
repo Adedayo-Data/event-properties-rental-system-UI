@@ -9,9 +9,12 @@ interface BookingCardProps {
   booking: Booking;
   onView: (b: Booking) => void;
   onContact: (b: Booking) => void;
+  isUpcoming?: boolean;
 }
 
-export function BookingCard({ booking, onView, onContact }: BookingCardProps) {
+export function BookingCard({ booking, onView, onContact, isUpcoming = false }: BookingCardProps) {
+  // For upcoming bookings, display "Confirmed" instead of "Pending"
+  const displayStatus = isUpcoming && booking.status === "Pending" ? "Confirmed" : booking.status;
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="p-6">
@@ -26,8 +29,8 @@ export function BookingCard({ booking, onView, onContact }: BookingCardProps) {
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
-                    {booking.status}
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(displayStatus)}`}>
+                    {displayStatus}
                   </span>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{booking.type}</span>
                 </div>
