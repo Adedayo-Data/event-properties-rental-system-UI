@@ -10,10 +10,14 @@ interface BookingDetailsModalProps {
   booking: Booking | null;
   onClose: () => void;
   onContact: (booking: Booking) => void;
+  isUpcoming?: boolean;
 }
 
-export function BookingDetailsModal({ open, booking, onClose, onContact }: BookingDetailsModalProps) {
+export function BookingDetailsModal({ open, booking, onClose, onContact, isUpcoming = false }: BookingDetailsModalProps) {
   if (!open || !booking) return null;
+
+  // For upcoming bookings, display "Confirmed" instead of "Pending"
+  const displayStatus = isUpcoming && booking.status === "Pending" ? "Confirmed" : booking.status;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -24,8 +28,8 @@ export function BookingDetailsModal({ open, booking, onClose, onContact }: Booki
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{booking.title}</h2>
               <div className="flex items-center gap-2">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
-                  {booking.status}
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(displayStatus)}`}>
+                  {displayStatus}
                 </span>
                 {booking.bookingId && (
                   <span className="text-sm text-gray-500">ID: {booking.bookingId}</span>
