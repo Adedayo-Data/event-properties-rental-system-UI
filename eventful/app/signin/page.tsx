@@ -52,7 +52,18 @@ export default function LoginForm() {
       // Assuming backend returns { token: "...", ... }
       if (res.data?.jwt) {
         localStorage.setItem("token", res.data.jwt);
-        router.push("/"); // Redirect to home
+        
+        // Trigger auth-changed event for navbar
+        window.dispatchEvent(new Event("auth-changed"));
+        
+        // Check if there's a redirect URL stored
+        const redirectUrl = localStorage.getItem("redirectAfterLogin");
+        if (redirectUrl) {
+          localStorage.removeItem("redirectAfterLogin");
+          router.push(redirectUrl);
+        } else {
+          router.push("/"); // Default redirect to home
+        }
       } else {
         setServerMessage("Unexpected server response.");
       }
