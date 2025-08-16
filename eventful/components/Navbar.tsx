@@ -41,13 +41,13 @@ const Navbar = () => {
   const menuItems = [
     { href: "/", label: "Home" },
     { href: "/venues", label: "Venues" },
-    { href: "/bookings", label: "Bookings" },
+    { href: "/my-bookings", label: "My Bookings" },
     { href: "/contact", label: "Contact" },
   ];
 
   const avatarMenuItems = [
-    { href: "/profile", label: "Profile" },
-    { href: "/settings", label: "Settings" },
+    // { href: "/profile", label: "Profile" },
+    // { href: "/settings", label: "Settings" },
     { href: "/logout", label: "Logout" },
   ];
 

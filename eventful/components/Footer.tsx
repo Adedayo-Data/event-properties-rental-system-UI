@@ -60,7 +60,7 @@ const Footer = () => {
               {[
                 { name: "Home", href: "/" },
                 { name: "Browse Venues", href: "/venues" },
-                { name: "My Bookings", href: "/bookings" },
+                { name: "My Bookings", href: "/my-bookings" },
                 { name: "Contact Us", href: "/contact" },
                 { name: "About", href: "/about" },
               ].map((link) => (
