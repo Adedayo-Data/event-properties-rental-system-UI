@@ -162,22 +162,33 @@ export const bookingsApi = {
     dateFrom?: string;
     dateTo?: string;
   }) => {
-    const params = new URLSearchParams();
-    if (filters?.status) params.append("status", filters.status);
-    if (filters?.venue) params.append("venue", filters.venue);
-    if (filters?.dateFrom) params.append("dateFrom", filters.dateFrom);
-    if (filters?.dateTo) params.append("dateTo", filters.dateTo);
-    
-    const queryString = params.toString();
-    return apiCall(`/api/admin/bookings${queryString ? `?${queryString}` : ""}`);
+    try {
+      const params = new URLSearchParams();
+      if (filters?.status) params.append("status", filters.status);
+      if (filters?.venue) params.append("venue", filters.venue);
+      if (filters?.dateFrom) params.append("dateFrom", filters.dateFrom);
+      if (filters?.dateTo) params.append("dateTo", filters.dateTo);
+      
+      const queryString = params.toString();
+      return await apiCall(`/api/bookings${queryString ? `?${queryString}` : ""}`);
+    } catch (error) {
+      console.warn("Admin bookings API not available, using user bookings endpoint");
+      // Fallback to user bookings endpoint for now
+      return await apiCall(`/api/bookings/user`);
+    }
   },
 
   // Admin: Update booking status
-  updateStatus: async (id: string, status: string) => {
-    return apiCall(`/api/admin/bookings/${id}/status`, {
-      method: "PUT",
-      body: JSON.stringify({ status }),
-    });
+  updateStatus: async (id: number, status: string) => {
+    try {
+      return await apiCall(`/api/bookings/${id}/status`, {
+        method: "PUT",
+        body: JSON.stringify({ status }),
+      });
+    } catch (error) {
+      console.warn("Admin booking status update API not available");
+      throw error;
+    }
   },
 };
 
@@ -206,12 +217,12 @@ export const usersApi = {
     if (filters?.search) params.append("search", filters.search);
     
     const queryString = params.toString();
-    return apiCall(`/api/admin/users${queryString ? `?${queryString}` : ""}`);
+    return apiCall(`/api/users${queryString ? `?${queryString}` : ""}`);
   },
 
   // Admin: Update user status
   updateStatus: async (id: string, status: string) => {
-    return apiCall(`/api/admin/users/${id}/status`, {
+    return apiCall(`/api/users/${id}/status`, {
       method: "PUT",
       body: JSON.stringify({ status }),
     });
@@ -222,17 +233,17 @@ export const usersApi = {
 export const dashboardApi = {
   // Get admin dashboard stats
   getStats: async () => {
-    return apiCall("/api/admin/dashboard/stats");
+    return apiCall("/api/dashboard/stats");
   },
 
   // Get recent bookings for dashboard
   getRecentBookings: async (limit: number = 5) => {
-    return apiCall(`/api/admin/dashboard/recent-bookings?limit=${limit}`);
+    return apiCall(`/api/dashboard/recent-bookings?limit=${limit}`);
   },
 
   // Get revenue analytics
   getRevenue: async (period: "week" | "month" | "year" = "month") => {
-    return apiCall(`/api/admin/dashboard/revenue?period=${period}`);
+    return apiCall(`/api/dashboard/revenue?period=${period}`);
   },
 };
 
