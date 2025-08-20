@@ -1,36 +1,84 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Booking } from "@/lib/types";
 import { motion } from "motion/react";
-import { Check, X, Eye, Calendar, DollarSign, Users, Clock } from "lucide-react";
+import { Check, X, Eye, Calendar, DollarSign, Users, Clock, RefreshCw } from "lucide-react";
+import { bookingsApi } from "@/lib/api";
 
 interface Props {
   bookings: Booking[];
   getStatusColor: (status: string) => string;
+  onBookingsUpdate?: () => void;
 }
 
-const BookingsTable: React.FC<Props> = ({ bookings, getStatusColor }) => {
+const BookingsTable: React.FC<Props> = ({ bookings, getStatusColor, onBookingsUpdate }) => {
   const [bookingList, setBookingList] = useState<Booking[]>(bookings);
+  const [loadingActions, setLoadingActions] = useState<{ [key: number]: boolean }>({});
 
-  const handleAccept = (bookingId: string) => {
-    setBookingList(prev => 
-      prev.map(booking => 
-        booking.id === bookingId 
-          ? { ...booking, status: 'confirmed' }
-          : booking
-      )
-    );
+  // Update local state when props change
+  useEffect(() => {
+    setBookingList(bookings);
+  }, [bookings]);
+
+  const handleAccept = async (bookingId: number) => {
+    setLoadingActions(prev => ({ ...prev, [bookingId]: true }));
+    
+    try {
+      await bookingsApi.updateStatus(bookingId, 'confirmed');
+      
+      // Update local state
+      setBookingList(prev => 
+        prev.map(booking => 
+          booking.id === bookingId 
+            ? { ...booking, status: 'confirmed' }
+            : booking
+        )
+      );
+      
+      // Notify parent component to refresh data
+      if (onBookingsUpdate) {
+        onBookingsUpdate();
+      }
+      
+      // Show success feedback
+      alert('Booking confirmed successfully!');
+    } catch (error) {
+      console.error('Failed to confirm booking:', error);
+      alert('Failed to confirm booking. Please try again.');
+    } finally {
+      setLoadingActions(prev => ({ ...prev, [bookingId]: false }));
+    }
   };
 
-  const handleReject = (bookingId: string) => {
-    setBookingList(prev => 
-      prev.map(booking => 
-        booking.id === bookingId 
-          ? { ...booking, status: 'cancelled' }
-          : booking
-      )
-    );
+  const handleReject = async (bookingId: number) => {
+    setLoadingActions(prev => ({ ...prev, [bookingId]: true }));
+    
+    try {
+      await bookingsApi.updateStatus(bookingId, 'cancelled');
+      
+      // Update local state
+      setBookingList(prev => 
+        prev.map(booking => 
+          booking.id === bookingId 
+            ? { ...booking, status: 'cancelled' }
+            : booking
+        )
+      );
+      
+      // Notify parent component to refresh data
+      if (onBookingsUpdate) {
+        onBookingsUpdate();
+      }
+      
+      // Show success feedback
+      alert('Booking cancelled successfully!');
+    } catch (error) {
+      console.error('Failed to cancel booking:', error);
+      alert('Failed to cancel booking. Please try again.');
+    } finally {
+      setLoadingActions(prev => ({ ...prev, [bookingId]: false }));
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -42,9 +90,9 @@ const BookingsTable: React.FC<Props> = ({ bookings, getStatusColor }) => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-NG', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'NGN'
     }).format(amount);
   };
 
