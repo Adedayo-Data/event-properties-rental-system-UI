@@ -49,9 +49,10 @@ export default function LoginForm() {
         password: formData.password,
       });
 
-      // Assuming backend returns { token: "...", ... }
-      if (res.data?.jwt) {
+      // Backend returns { jwt: "...", role: "...", message: "..." }
+      if (res.data?.jwt && res.data?.role) {
         localStorage.setItem("token", res.data.jwt);
+        localStorage.setItem("userRole", res.data.role);
         
         // Trigger auth-changed event for navbar
         window.dispatchEvent(new Event("auth-changed"));
@@ -62,7 +63,12 @@ export default function LoginForm() {
           localStorage.removeItem("redirectAfterLogin");
           router.push(redirectUrl);
         } else {
-          router.push("/"); // Default redirect to home
+          // Redirect based on user role
+          if (res.data.role === 'ADMIN') {
+            router.push("/admin");
+          } else {
+            router.push("/"); // Default redirect to home for regular users
+          }
         }
       } else {
         setServerMessage("Unexpected server response.");
