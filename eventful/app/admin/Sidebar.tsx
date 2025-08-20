@@ -74,15 +74,15 @@ const Sidebar: React.FC<Props> = ({ activePage, setActivePage }) => {
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
               <span className="text-gray-600">Active Venues</span>
-              <span className="font-medium text-blue-600">18</span>
+              <span className="font-medium text-blue-600">2</span>
             </div>
             <div className="flex justify-between text-xs">
               <span className="text-gray-600">Today's Bookings</span>
-              <span className="font-medium text-green-600">5</span>
+              <span className="font-medium text-green-600">1</span>
             </div>
             <div className="flex justify-between text-xs">
               <span className="text-gray-600">Revenue</span>
-              <span className="font-medium text-purple-600">$12.5K</span>
+              <span className="font-medium text-purple-600">&#8358;150K</span>
             </div>
           </div>
         </motion.div>
